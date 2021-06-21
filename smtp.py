@@ -99,4 +99,3 @@ def send_message(fromHost, toHost, mailFrom, mailTo, subject, msg):
   print(response)
 
   return responses
-

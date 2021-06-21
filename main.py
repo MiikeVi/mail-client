@@ -14,6 +14,8 @@ class Login(QtWidgets.QMainWindow):
         self.menu = {}
 
     def showMenu(self):
+        'Set campos user, password y genera instancia de clase Menu'
+
         user = self.input_user.text()
         password = self.input_password.text()
         if self.checkAuth(user, password):
@@ -25,10 +27,14 @@ class Login(QtWidgets.QMainWindow):
     
     #Validación campos user y pass de login
     def checkAuth(self, user, password):
+        'Validar campos user y password llenos'
+
         return user == "" or password == ""   
     
     #Crear Dialog
     def createDialog(self):
+        'Genera instancia de clase Dialog seteando label  de error'
+
         self.dialog = Dialog()
         self.dialog.label_response.setPlainText("Debe ingresar usuario y contraseña")
         self.dialog.show()
@@ -46,13 +52,19 @@ class Menu(QtWidgets.QMainWindow):
         self.button_exit.clicked.connect(self.exit)
         
     def showMailbox(self, user, password):
+        'Genera instancia de Mailbox y hace visible la ventana'
+
         self.mailbox = MailBox(user, password)
         self.mailbox.show()
 
     def showSend(self):
+        'Hace visible objeto(ventana) Send'
+
         self.send.show()
     
     def exit(self):
+        'Terminar ejecución del programa'
+
         sys.exit(app.exec_())
 
 class Send(QtWidgets.QMainWindow):
@@ -63,6 +75,8 @@ class Send(QtWidgets.QMainWindow):
         self.button_send.clicked.connect(self.send_mail)
 
     def send_mail(self):
+        'Setea campos necesarios para usar funcion send_message y crea un cuadro de dialogo con la response'
+
         fromHost = self.input_from_host.text()
         toHost = self.input_to_host.text()
         from_ = self.input_from.text()
@@ -89,9 +103,13 @@ class Send(QtWidgets.QMainWindow):
         self.dialog.show()
     
     def checkFields(self, origin, destination, from_, to, subject, msg):
+        'Comprueba que campos esenciales no sean nulos'
+
         return self == "" or origin == "" or destination == "" or from_ == "" or to == "" or subject == "" or msg == ""
     
     def createDialog(self):
+        'Generar dialogo de error'
+
         self.dialog = Dialog()
         self.dialog.label_response.setPlainText("Debe rellenar todos los campos")
         self.dialog.show()
@@ -103,6 +121,8 @@ class Dialog(QDialog):
         self.button_accept.clicked.connect(self.onClickOk)
 
     def onClickOk(self):
+        'Cerrar ventana de dialogo'
+
         self.close()
 
 class MailBox(QtWidgets.QMainWindow):
@@ -120,7 +140,7 @@ class MailBox(QtWidgets.QMainWindow):
         self.syncList(user, password, host)
         
     def syncList(self, user, password, host):
-        'Sincronizar correos'
+        'Lista mails seteando la response en label list de ui'
 
         print(host, "from synclist")
         response = pop.list_mails(user, password, host)
@@ -128,7 +148,8 @@ class MailBox(QtWidgets.QMainWindow):
     
  
     def deleteMessages(self, user, password):
-        'Eliminar n correos'
+        'Setea host, id, eliminar n correos y setea las responses como mensaje de dialogo ui'
+        
         host = self.input_to_host.text()
         id = self.input_id_mail.text()
         response = pop.delete_mail(user, password, id, host)
@@ -143,7 +164,7 @@ class MailBox(QtWidgets.QMainWindow):
         self.dialog.show()
 
     def viewMessage(self, user, password):
-        'Ver uno o multiples correos/mensajes'
+        'Set host, id y lista de mensajes en la ui'
 
         host = self.input_to_host.text()
         id = self.input_id_mail.text()
