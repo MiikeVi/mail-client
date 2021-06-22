@@ -51,14 +51,17 @@ def send_message(fromHost, toHost, mailFrom, mailTo, subject, msg):
   responses.append(response)
   print(response)
 
-  #Se envían lass n direcciones de correo destinatarios
+  #Se envían las n direcciones de correo destinatarios
   while(i < len(recipients)):
-    command = "RCPT TO: {}\n".format(recipients[i])
+    rcpt = recipients[i].strip()
+    command = "RCPT TO: {}\n".format(rcpt)
     con.send(command.encode())
     response = con.recv(1024).decode()
     responses.append(response)
     print(response)
     i += 1
+
+  i = 0
 
   #Se empieza a escribir el mensaje con el comando DATA
   command = "DATA\n"
@@ -74,7 +77,8 @@ def send_message(fromHost, toHost, mailFrom, mailTo, subject, msg):
   con.send(command.encode())
 
   while(i < len(recipients)):
-    command = "To: {}\n".format(recipients[i])
+    rcpt = recipients[i].strip()
+    command = "To: {}\n".format(rcpt)
     con.send(command.encode())
     i += 1
 
@@ -92,7 +96,7 @@ def send_message(fromHost, toHost, mailFrom, mailTo, subject, msg):
   print(response)
 
   #Fin de la sesión
-  quit = "quit \n"
+  quit = "QUIT \n"
   con.send(quit.encode())
   response = con.recv(1024).decode()
   responses.append(response)
